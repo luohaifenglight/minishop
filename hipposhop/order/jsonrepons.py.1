@@ -1,0 +1,21 @@
+#! coding:utf-8
+from utils.serializer import DjangoJSONEncoder
+from django.http import JsonResponse
+
+
+def json_response(func):
+    def _warps(*args, **kwrgs):
+        result = func(*args, **kwrgs)
+        if isinstance(result, JsonResponse):
+            return result
+        else:
+            results = {
+                "meta": {
+                    "msg": "",
+                    "code": 0
+                },
+                "results": result
+            }
+            return results
+
+    return _warps
